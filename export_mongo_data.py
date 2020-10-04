@@ -1,6 +1,4 @@
-import xlrd
 import xlwt
-from xlutils.copy import copy
 import pymongo
 import covid_19.settings as settings
 
