@@ -109,7 +109,7 @@ class BrowserDownloaderMiddleware(object):
 
     def process_request(self, request, spider):
         # 根据是否定义browser对象，来判断是否使用browser来做数据爬取
-        if request.meta['use_browser'] is True:
+        if hasattr(spider, 'browser') and request.meta['use_browser'] is True:
             spider.browser.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
     "source": """
     Object.defineProperty(navigator, 'webdriver', {

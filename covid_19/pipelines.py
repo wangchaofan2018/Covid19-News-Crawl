@@ -26,5 +26,5 @@ class BaseDataPipeline:
     def process_item(self, item, spider):
         collection = self.db[self.collection_name]
         dict_item = dict(item) if isinstance(item, Item) else item
-        collection.insert(dict_item)
+        # collection.insert(dict_item)
         return item

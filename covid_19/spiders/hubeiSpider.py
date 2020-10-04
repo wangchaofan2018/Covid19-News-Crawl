@@ -8,7 +8,7 @@ from covid_19.items import BaseDataItem
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-class Covid19Spider(Spider):
+class HubeiSpider(Spider):
     def __init__(self):
         # 初始化chrome对象
         chrome_options = webdriver.ChromeOptions()
@@ -17,9 +17,9 @@ class Covid19Spider(Spider):
         chrome_options.add_experimental_option('useAutomationExtension', False)
         # chrome_options.add_argument('--headless')
         self.browser = webdriver.Chrome('chromedriver', chrome_options=chrome_options)
-        super(Covid19Spider, self).__init__()
+        super(HubeiSpider, self).__init__()
 
-    name="covid_19_hubei"
+    name="hubei"
     base_url = "http://www.hubei.gov.cn/hbfb/xwfbh/"
     # allowed_domains = ["http://www.hubei.gov.cn"]
 
