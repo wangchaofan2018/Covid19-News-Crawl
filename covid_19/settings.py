@@ -50,9 +50,7 @@ COOKIES_ENABLED = True
 # Override the default request headers:
 DEFAULT_REQUEST_HEADERS = {
   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-  'Accept-Language': 'en',
-  'Cookie':'Secure; FSSBBIl1UgzbN7N80S=imwotUDjy5a161oG.QO.IKWMNQmZg.t8fFEKmivRMbMaYvQmfsJpg9oeIx.aE2XO; Secure; _trs_uv=kftg7k30_3027_i9ke; _trs_ua_s_1=kftwww.hubei.gov.cn7k30_3027_fwh6; Hm_lvt_5544783ae3e1427d6972d9e77268f25d=1601715763; dataHide2=bcbf7a5c-77fd-4157-9a66-4b2d6fad92ab; Hm_lpvt_5544783ae3e1427d6972d9e77268f25d=1601717455; FSSBBIl1UgzbN7N80T=4Nq9DHQtXC3Dq5ZfMV4rPELVHaTyM4Cz7LjuvhN1EhZVw.qqUHkOuYELP7nrfsWG_Fj2xL.Bkve_14D0vDzExFmSYZUWWspts0YSd2olgDww5_QQTBMrUS6FRMhHV6_OLaJ6XoQ6eQFj8.Zdgibg4xWjP_ohJXq9G1UtWYbAQbq2nU0YYpcF5vo4Tp2mqikdpmhUEmo9OpBt5ZrCyv0xlBcT0mIEsaPJHH7QOPomj79wuzE2RQikOSpUE7xcm0PZEcvemW6WcTZWuafPf4ntpsOjN9W7vz8PRcRjOFj89.i5tH9J81ziOKM.f8a4nOrrGAMdbHwdadnSYwHKGOBFqVXGw03WuOAF9TY3IvlWFR7oBSdEvJt7n75OqHJaDzk7AhDn_smESr_nRR3ZI4.vfypKb',
-  'Host':'www.hubei.gov.cn'
+  'Accept-Language': 'en'
 }
 
 # Enable or disable spider middlewares
