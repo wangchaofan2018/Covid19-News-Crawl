@@ -1,6 +1,7 @@
 import xlwt
 import pymongo
 import covid_19.settings as settings
+import sys
 
 client = pymongo.MongoClient(settings.MONGO_DB_URI)
 db = client[settings.MONGO_DB_NAME]
@@ -13,7 +14,13 @@ for index in range(len(titles)):
     sheet.write(0,index,titles[index])
 
 cur = 1
-for item in collection.find():
+site = sys.argv[1]
+mydoc = collection.find()
+if site == "hubei":
+    mydoc = collection.find({"location":"湖北"})
+elif site == "shanxi":
+    mydoc = collection.find({"location":"山西"})
+for item in mydoc:
     detail_url = item["detail_url"]
     sheet.write(cur,0,item["publish_time"])
     sheet.write(cur,1,item["location"])
@@ -24,6 +31,6 @@ for item in collection.find():
     sheet.write(cur,6,item["content"])
     cur = cur+1
 
-workbook.save("新闻.xls")
+workbook.save("新闻发布会相关.xls")
 print("job finish")
     
