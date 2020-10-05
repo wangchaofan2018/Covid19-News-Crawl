@@ -1,5 +1,4 @@
 # -*-coding: utf-8 -*-
-import sys,os
 import scrapy
 from scrapy import Spider
 from scrapy import Request
@@ -36,8 +35,8 @@ class HubeiSpider(Spider):
             detail_url = self.base_url+href
             yield scrapy.Request(url=detail_url,meta={'use_browser':True,"detail_url":detail_url},callback=self.detail_parse,dont_filter=True)
 
-        next_page_href = sel.xpath("//nav/ul/li[last()]/a/@href").extract_first()
-        if not next_page_href is None:
+        next_page_href = sel.xpath('//nav/ul/li[last()]/a/@href').extract_first()
+        if not next_page_href != "javascript:void(0);":
             next_url = self.base_url+''+next_page_href
             yield scrapy.Request(url=next_url,meta={'use_browser':True},callback=self.parse,dont_filter=True)
 
