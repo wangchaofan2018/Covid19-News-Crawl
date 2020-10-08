@@ -36,7 +36,7 @@ class LiaoningSpider(Spider):
         if (current_total_page.group(1) == 1) and (current_total_page.group(2) > current_total_page.group(1)):
             href1 = sel.xpath('//div[@class="dlist_page"]/a[1]/@href').extract_first()
             next_page_href = self.original_url + href1
-            yield scrapy.Request(url=next_page_url,callback=self.parse,dont_filter=True)
+            yield scrapy.Request(url=next_page_href,callback=self.parse,dont_filter=True)
 
         elif current_total_page.group(1) == current_total_page.group(2):
             pass
@@ -44,11 +44,11 @@ class LiaoningSpider(Spider):
         else:
             href2 = sel.xpath('//div[@class="dlist_page"]/a[3]/@href').extract_first()
             next_page_href = self.original_url + href2
-            yield scrapy.Request(url=next_page_url,callback=self.parse,dont_filter=True)
+            yield scrapy.Request(url=next_page_href,callback=self.parse,dont_filter=True)
 
 
 
-    def detail_parse(self,respone):
+    def detail_parse(self,response):
         sel = Selector(response)
         detail_url = response.meta["detail_url"]
         publish_time = response.meta["publish_time"]
