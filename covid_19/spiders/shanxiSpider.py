@@ -54,17 +54,17 @@ class ShanxiSpider(Spider):
         detail_url = response.meta["detail_url"]
         item = BaseDataItem()
         sel = Selector(response)
-        title = sel.xpath('//div[@class="detail-article-title oflow-hd"]/h5/text()').extract_first()
-        publish_time = sel.xpath("//li[@class='article-infos-source left']/span[1]/text()").extract_first()
+        title = sel.xpath('//div[@class="detail-article-title oflow-hd"]/h5//text()').extract_first()
+        publish_time = sel.xpath("//li[@class='article-infos-source left']/span[1]//text()").extract_first()
         location = "山西"
         attend_persons = ""
         person_arr = sel.xpath("//p/strong/text()").extract()
         for person in person_arr:
             if person.find("记者")==-1:
                 attend_persons = attend_persons+person
-        summary = sel.xpath('//p[@align="center"]/following-sibling::p[1]/text()').extract_first()
+        summary = sel.xpath('//p[@align="center"]/following-sibling::p[1]//text()').extract_first()
         content = ""
-        content_strs = sel.xpath('//div[@class="TRS_Editor"]/p/text()').extract()
+        content_strs = sel.xpath('//div[@class="TRS_Editor"]/p//text()').extract()
         for content_row in content_strs:
             content = content + content_row.strip()+ "\n"
         
