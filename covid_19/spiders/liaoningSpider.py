@@ -8,6 +8,7 @@ from covid_19.items import BaseDataItem
 class LiaoningSpider(Spider):
     def __init__(self):
         self.year = 2020
+        self.cur_page = 1
         super(LiaoningSpider, self).__init__()
     
     name = "liaoning"
@@ -28,27 +29,19 @@ class LiaoningSpider(Spider):
             publish_time = info.xpath('./span').extract_first() #当前页发布会对应发布日期
             yield scrapy.Request(url=detail_url,meta={"detail_url":detail_url,"title":title,"publish_time":publish_time},callback=self.detail_parse,dont_filter=True)
         
-        # next_page_href = sel.xpath('//div[@class="dlist_page"]/a[1]').extract()
         
-        dlist_page_text = sel.xpath('//div[@class="dlist_page"]/text()').extract_first()  #当前页下方换页按钮（当前第1页 | 共4页 | 首页 | 上一页 | ）
-        current_total_page = re.match(".*?[\u4e00-\u9fa5]+(\d+)[\u4e00-\u9fa5]+.*?[\u4e00-\u9fa5]+(\d+)[\u4e00-\u9fa5]+",dlist_page_text) #正则匹配当前页和总页
-        
-        if (current_total_page.group(1) == 1) and (current_total_page.group(2) > current_total_page.group(1)):
-            href1 = sel.xpath('//div[@class="dlist_page"]/a[1]/@href').extract_first()
-            next_page_href = self.original_url + href1
-            yield scrapy.Request(url=next_page_url,callback=self.parse,dont_filter=True)
-
-        elif current_total_page.group(1) == current_total_page.group(2):
-            pass
-
-        else:
-            href2 = sel.xpath('//div[@class="dlist_page"]/a[3]/@href').extract_first()
-            next_page_href = self.original_url + href2
-            yield scrapy.Request(url=next_page_url,callback=self.parse,dont_filter=True)
+        js_text = sel.xpath('//div[@class="dlist_page"]//text()').extract_first().strip()  #当前页下方换页按钮（当前第1页 | 共4页 | 首页 | 上一页 | ）
+        js_text = js_text[:20]
+        numbers = re.match(".*?(\d+)",js_text)
+        total_page = int(numbers.group(1))
+        if self.cur_page<total_page:
+            next_url = self.original_url+"index_"+str(self.cur_page)+".html"
+            self.cur_page +=1
+            yield scrapy.Request(url=next_url,callback=self.parse,dont_filter=True)
 
 
 
-    def detail_parse(self,respone):
+    def detail_parse(self,response):
         sel = Selector(response)
         detail_url = response.meta["detail_url"]
         publish_time = response.meta["publish_time"]
