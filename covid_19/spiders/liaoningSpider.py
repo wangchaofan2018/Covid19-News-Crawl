@@ -26,7 +26,7 @@ class LiaoningSpider(Spider):
         for info in detail_page_info:
             detail_url = info.xpath('./a/@href').extract_first() #当前页发布会连接
             title = info.xpath('./a/@title').extract_first() #当前页发布会标题
-            publish_time = info.xpath('./span').extract_first() #当前页发布会对应发布日期
+            publish_time = info.xpath('./span/text()').extract_first() #当前页发布会对应发布日期
             yield scrapy.Request(url=detail_url,meta={"detail_url":detail_url,"title":title,"publish_time":publish_time},callback=self.detail_parse,dont_filter=True)
         
         
@@ -48,7 +48,7 @@ class LiaoningSpider(Spider):
         title = response.meta["title"]
         text_url_src = sel.xpath('//div[@class="fbh_wz"]/iframe[1]/@src').extract_first()
         text_url = self.gouver_url + text_url_src
-        title = sel.xpath('//div[@class="dlist_titlefbh"]').extract_first()
+        title = sel.xpath('//div[@class="dlist_titlefbh"]//text()').extract_first()
 
         yield scrapy.Request(url = text_url,meta={"detail_url":detail_url,"title":title,"publish_time":publish_time,"title":title},callback=self.text_parse,dont_filter=True)
 
@@ -61,19 +61,19 @@ class LiaoningSpider(Spider):
         item["title"] = response.meta["title"]
         item["location"] = "辽宁"
         content =""
-        content_text = sel.xpath('//div[@class="fbh_wzf"]').extract()
+        content_text = sel.xpath('//div[@class="fbh_wzf"]//text()').extract()
         for col in content_text:
             content = content + col.strip() +"\n"
 
         item["content"] = content
         attend_persons_all = ""
-        attend_persons_text = sel.xpath('//div[@class="fbh_wzf"]/div[@class="fbh_rm"]').extract()
+        attend_persons_text = sel.xpath('//div[@class="fbh_wzf"]/div[@class="fbh_rm"]//text()').extract()
         for row in attend_persons_text:
             attend_persons_all = attend_persons_all + row.strip() + "\n"
-        attend_persons = list(set(attend_persons_all))
+        attend_persons = attend_persons_all
         item["attend_persons"] = attend_persons
-        print(item)
-        # yield item
+        item["summary"]=""
+        yield item
 
 
 

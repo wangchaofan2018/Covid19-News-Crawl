@@ -24,7 +24,7 @@ class JilinSpider(Spider):
         for info in detail_page_info:
             detail_url = info.xpath('./a/@href').extract_first() #当前页发布会连接
             title = info.xpath('./a/@title').extract_first() #当前页发布会标题
-            publish_time = info.xpath('./span').extract_first() #当前页发布会对应发布日期
+            publish_time = info.xpath('./span/text()').extract_first() #当前页发布会对应发布日期
             if detail_url[0] == ".":
                 return
             yield scrapy.Request(url=detail_url,meta={"detail_url":detail_url,"title":title,"publish_time":publish_time},callback=self.detail_parse,dont_filter=True)
@@ -50,11 +50,9 @@ class JilinSpider(Spider):
         item["content"] = content
 
         attend_persons_all = ""
-        attend_persons_text = sel.xpath('//font').extract()
-        for row in attend_persons_text:
-            attend_persons_all = attend_persons_all + row.strip() + "\n"
-        attend_persons = list(set(attend_persons_all))
-        item["attend_persons"] = attend_persons
+        attend_persons_text = sel.xpath('//font/text()').extract()
+        item["attend_persons"] = attend_persons_text
+        item["summary"]=""
         yield item
 
 

@@ -16,21 +16,43 @@ for index in range(len(titles)):
 cur = 1
 site = sys.argv[1]
 mydoc = collection.find()
+name = ""
 if site == "hubei":
-    mydoc = collection.find({"location":"湖北"})
+    name = "湖北"
+    mydoc = collection.find({"location":name})
 elif site == "shanxi":
-    mydoc = collection.find({"location":"山西"})
+    name = "山西"
+    mydoc = collection.find({"location":name})
+elif site == "anhui":
+    name = "安徽"
+    mydoc = collection.find({"location":name})
+elif site == "heilongjiang":
+    name = "黑龙江"
+    mydoc = collection.find({"location":name})
+elif site == "jilin":
+    name = "吉林"
+    mydoc = collection.find({"location":name})
+elif site == "liaoning":
+    name = "辽宁"
+    mydoc = collection.find({"location":name})
+elif site == "zhejiang":
+    name = "浙江"
+    mydoc = collection.find({"location":name})
 for item in mydoc:
     detail_url = item["detail_url"]
     sheet.write(cur,0,item["publish_time"])
     sheet.write(cur,1,item["location"])
     sheet.write(cur,2,item["attend_persons"])
     sheet.write(cur,3,item["title"])
-    sheet.write(cur,4,item["summary"])
+    summary = ""
+    #先写死
+    if name=="黑龙江" or name=="山西" or name=="湖北":
+        summary = item["summary"]
+    sheet.write(cur,4,summary)
     sheet.write(cur,5,xlwt.Formula('HYPERLINK("%s")'%detail_url))#item["detail_url"])
     sheet.write(cur,6,item["content"])
     cur = cur+1
 
-workbook.save("新闻发布会相关.xls")
-print("job finish")
+workbook.save("%s-数据.xls"%name)
+
     

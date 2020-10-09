@@ -29,7 +29,7 @@ class LiaoningSpider(Spider):
         li_labels = sel.xpath('//div[@class="clearfix w1000 ej_con"]/ul/li')
         for li_label in li_labels:
             href_str = li_label.xpath(".//a/@href").extract_first()
-            publish_time = li_label.xpath(".//em/text()")
+            publish_time = li_label.xpath(".//em/text()").extract_first()
             target_url = ""
             if href_str[0]=="/":
                 target_url = self.domain+href_str
