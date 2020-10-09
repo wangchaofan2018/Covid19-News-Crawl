@@ -44,9 +44,9 @@ class AnhuiSpider(Spider):
 
         attend_persons = ""
         attend_person_all = sel.xpath('//div[@class="fty_imglistlb"]/ul/li/a/@data-title').extract()
-        for persons in attend_person_all[:-1]:  #多一个“发布会现场”
-            attend_persons = attend_persons + persons + "\n" #应该不需要去掉空格，因为：省人民政府副省长 章㬢
-        
+        # for persons in attend_person_all[:-1]:  #多一个“发布会现场”
+            # attend_persons = attend_persons + persons + "\n" #应该不需要去掉空格，因为：省人民政府副省长 章㬢
+        attend_persons = attend_person_all[:-1] # 直接拿到列表赋值
         item["attend_persons"] = attend_persons
 
         content = ""

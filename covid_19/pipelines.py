@@ -25,7 +25,8 @@ class BaseDataPipeline:
     def close_spider(self, spider):
         self.client.close()
     def process_item(self, item, spider):
-        collection = self.db["experiment"]
+        collection = self.db[self.collection_name]
+        # collection = self.db["experiment"]
         # title = item["title"]
         # content = item["content"]
         # time_str = item["publish_time"]
