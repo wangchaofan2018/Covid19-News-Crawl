@@ -37,12 +37,12 @@ class ZhejiangSpider(Spider):
         sel = Selector(response)
         item["detail_url"] = response.meta["detail_url"]
         item["title"] = response.meta["title"]
-        item["location"] = "浙江省之江饭店会议中心三楼新闻发布厅"
+        item["location"] = "浙江"
         content = sel.xpath('//div[@class="chat_cont_list"]/ul/li[4]/span[2]').extract_first()
         item["content"] = content
 
         attend_persons_all = sel.xpath('//div[@class="chat_cont_list"]/ul/li[3]/span[2]').extract_first()
-        item["attend_persons_all"] = attend_persons_all
+        item["attend_persons"] = attend_persons_all
 
         publish_time = sel.xpath('//div[@class="chat_cont_list"]/ul/li[2]/span[2]').extract_first()
         item["publish_time"] = publish_time
