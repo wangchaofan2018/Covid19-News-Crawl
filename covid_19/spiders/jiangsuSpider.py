@@ -19,7 +19,7 @@ class JiangsuSpider(Spider):
     
     def start_requests(self):
         
-        post_url = "http://www.jiangsu.gov.cn/module/web/jpage/dataproxy.jsp?startrecord=1&endrecord=0&perpage=40"
+        post_url = "http://www.jiangsu.gov.cn/module/web/jpage/dataproxy.jsp?startrecord=1&endrecord=40&perpage=40"
         yield scrapy.FormRequest(url=post_url,method="POST",formdata=self.data_param ,headers={"Content_type":"application/x-www-form-urlencoded"},callback=self.parse,dont_filter=True)
 
     def parse(self,response):
@@ -34,7 +34,7 @@ class JiangsuSpider(Spider):
 
         if len(records)==41:
             self.since += 40
-            url = "http://www.jiangsu.gov.cn/module/web/jpage/dataproxy.jsp?startrecord=1&endrecord=%s&perpage=40"%str(self.since)
+            url = "http://www.jiangsu.gov.cn/module/web/jpage/dataproxy.jsp?startrecord=%s&endrecord=%s&perpage=40"%(str(self.since),str(self.since+40))
             yield scrapy.FormRequest(url=url,method="POST",formdata=self.data_param ,headers={"Content_type":"application/x-www-form-urlencoded"},callback=self.parse,dont_filter=True)
 
     def detail_parse(self,response):
@@ -47,7 +47,7 @@ class JiangsuSpider(Spider):
         item["detail_url"] = detail_url
         item["title"] = title
         item["publish_time"] = publish_time
-        item["location"] = "安徽"
+        item["location"] = "江苏"
         item["attend_persons"]=""
         item["summary"]=""
         item["content"]=content

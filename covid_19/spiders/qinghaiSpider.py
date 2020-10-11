@@ -18,13 +18,10 @@ class QinghaiSpider(Spider):
         yield scrapy.Request(url=url,callback=self.parse,dont_filter=True)
     def parse(self,response):
         sel = Selector(response)
-        detail_page_info =sel.xpath('//table[@align="center"]//td')
+        detail_page_info =sel.xpath('//table[@width="720"]//td[1]')
         for info in detail_page_info:
             detail_url = info.xpath('./a/@href').extract_first()
-            publish_time = info.xpath('./div[@align="right"]').extract_first()
-            # publish_time = publish_time_original[1:-1]  # 返回的日期为[03-27]，需要取出3-27
-            print(detail_url)
-            yield scrapy.Request(url=detail_url,meta={"detail_url":detail_url,"publish_time":publish_time},callback=self.detail_parse,dont_filter=True)
+            yield scrapy.Request(url=detail_url,meta={"detail_url":detail_url},callback=self.detail_parse,dont_filter=True)
 
         if self.num > 5:
             next_page_url = "http://www.qh.gov.cn/zwgk/system/more/203080000000000/0000/203080000000000_0000003%s.shtml"%str(self.num)
@@ -36,9 +33,9 @@ class QinghaiSpider(Spider):
         item = BaseDataItem()
         sel = Selector(response)
         item["detail_url"] = response.meta["detail_url"]
-        item["publish_time"] = response.meta["publish_time"]
+        item["publish_time"] = sel.xpath("//div[@class='abstract tc']/text()")
         item["location"] = "青海"
-        title = sel.xpath('//h1[@class="blue tc"]').extract_first()
+        title = sel.xpath('//h1[@class="blue tc"]/text()').extract_first()
         item["title"] = title
         content = ""
         content_text = sel.xpath('//div[@class="details_content"]/p/text()').extract()
@@ -47,6 +44,5 @@ class QinghaiSpider(Spider):
         item["content"] = content
         item["attend_persons"] = ""
         item["summary"]=""
-        print(item)
-        # yield item
+        yield item
 
