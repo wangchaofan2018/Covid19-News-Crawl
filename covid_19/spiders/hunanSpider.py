@@ -48,6 +48,7 @@ class HunanSpider(Spider):
         for row in content_text:
             content = content + row.strip() + "\n"
         item["content"] = content
+        item["summary"]=""
         print(item)
 
         # yield item
