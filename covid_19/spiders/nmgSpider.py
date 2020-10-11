@@ -45,7 +45,8 @@ class NeimengguSpider(Spider):
         item["detail_url"] = response.meta["detail_url"]
         item["title"] = response.meta["title"]
         item["publish_time"] = response.meta["publish_time"]
-        item["location"] = "内蒙古自治区"
+        item["province"] = "内蒙古自治区"
+        item["location"] = ""
         content = ""
         content_text = sel.xpath('//div[@id="zoom"]/p//text()').extract()
         for row in content_text:

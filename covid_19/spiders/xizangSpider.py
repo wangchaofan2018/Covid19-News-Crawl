@@ -34,7 +34,8 @@ class XizangSpider(Spider):
         item["publish_time"] = response.meta["publish_time"]
         item["title"] = response.meta["title"]
         item["summary"]=""
-        item["location"] = "西藏自治区"
+        item["province"] = "西藏自治区"
+        item["location"] = ""
         content = ""
         content_text = sel.xpath('//div[@class="vw-art-list"]//p/text()').extract()
         for row in content_text:
@@ -44,7 +45,7 @@ class XizangSpider(Spider):
         attend_persons_all = sel.xpath('//div[@class="vw-art-list"]//span/text()').extract()
         for person in attend_persons_all[1:]:
             attend_persons = attend_persons + person.strip() + "\n"
-        item["attend_persons"] = attend_persons
+        item["attend_persons"] = ""
         yield item
 
         

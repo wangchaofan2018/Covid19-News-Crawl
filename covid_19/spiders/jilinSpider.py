@@ -38,10 +38,12 @@ class JilinSpider(Spider):
     def detail_parse(self,response):
         item = BaseDataItem()
         sel = Selector(response)
-        item["publish_time"] = response.meta["publish_time"]
+        uniq_time = response.meta["publish_time"]
+        item["publish_time"] = re.sub("\D","-",uniq_time)
         item["detail_url"] = response.meta["detail_url"]
         item["title"] = response.meta["title"]
-        item["location"] = "吉林"
+        item["province"] = "吉林"
+        item["location"] = ""
 
         content =""
         content_text = sel.xpath('//div[@class="TRS_Editor"]//text()').extract()

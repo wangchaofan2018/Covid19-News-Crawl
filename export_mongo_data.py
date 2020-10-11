@@ -9,7 +9,7 @@ collection = db[settings.MONGO_COLLECTION_NAME]
 workbook = xlwt.Workbook()
 sheet = workbook.add_sheet("数据统计")
 
-titles = ["日期","地点","出席人员","标题","新闻概要","网页地址","详细内容"]
+titles = ["日期","省份","发布地点","出席人员","标题","新闻概要","网页地址","详细内容"]
 for index in range(len(titles)):
     sheet.write(0,index,titles[index])
 
@@ -41,16 +41,17 @@ elif site == "zhejiang":
 for item in mydoc:
     detail_url = item["detail_url"]
     sheet.write(cur,0,item["publish_time"])
-    sheet.write(cur,1,item["location"])
-    sheet.write(cur,2,item["attend_persons"])
-    sheet.write(cur,3,item["title"])
+    sheet.write(cur,1,item["province"])
+    sheet.write(cur,2,item["location"])
+    sheet.write(cur,3,item["attend_persons"])
+    sheet.write(cur,4,item["title"])
     summary = ""
     #先写死
     if name=="黑龙江" or name=="山西" or name=="湖北":
         summary = item["summary"]
-    sheet.write(cur,4,summary)
-    sheet.write(cur,5,xlwt.Formula('HYPERLINK("%s")'%detail_url))#item["detail_url"])
-    sheet.write(cur,6,item["content"])
+    sheet.write(cur,5,summary)
+    sheet.write(cur,6,xlwt.Formula('HYPERLINK("%s")'%detail_url))#item["detail_url"])
+    sheet.write(cur,7,item["content"])
     cur = cur+1
 
 workbook.save("%s-数据.xls"%name)

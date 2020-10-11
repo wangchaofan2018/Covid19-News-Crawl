@@ -40,7 +40,8 @@ class AnhuiSpider(Spider):
         item["detail_url"] = response.meta["detail_url"]
         item["title"] = response.meta["title"]
         item["publish_time"] = response.meta["publish_time"]
-        item["location"] = "安徽"
+        item["province"] = "安徽"
+        item["location"] = ""
         item["summary"]=""
 
         attend_persons = ""

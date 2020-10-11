@@ -41,7 +41,8 @@ class GuangxiSpider(Spider):
         sel = Selector(response)
         item["publish_time"] = response.meta["publish_time"][1:-1]
         item["detail_url"] = response.meta["detail_url"]
-        item["location"] = "广西"
+        item["province"] = "广西"
+        item["location"] = ""
         item["title"] = response.meta["title"]
         item["attend_persons"] = ""
         item["summary"] = response.meta["summary"]
@@ -51,8 +52,7 @@ class GuangxiSpider(Spider):
             content = content + col.strip() +"\n"
 
         item["content"] = content
-        print(item)
-        # yield item
+        yield item
 
 
 

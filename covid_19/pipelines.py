@@ -29,12 +29,14 @@ class BaseDataPipeline:
         # collection = self.db["experiment"]
         # title = item["title"]
         # content = item["content"]
-        # time_str = item["publish_time"]
-        # time_arr = time.strptime(time_str,'%Y-%m-%d %H:%M')
-        # time_stamp = time.mktime(time_arr)
-        #选取2020年以后的数据
-        # if time_stamp> 1577808000:
-            # if title.find("新冠")!=-1:
-        dict_item = dict(item) if isinstance(item, Item) else item
-        collection.insert(dict_item)
-        return item
+        time_str = item["publish_time"]
+        time_arr = time.strptime(time_str,'%Y-%m-%d')
+        time_stamp = time.mktime(time_arr)
+        item["time_stamp"]=time_stamp
+        if time_stamp > 1577808000:    
+            #选取2020年以后的数据
+            # if time_stamp> 1577808000:
+                # if title.find("新冠")!=-1:
+            dict_item = dict(item) if isinstance(item, Item) else item
+            collection.insert(dict_item)
+            return item

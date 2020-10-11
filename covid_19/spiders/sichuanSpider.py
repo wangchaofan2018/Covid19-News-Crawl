@@ -25,8 +25,10 @@ class SichuanSpider(Spider):
             if detail_page_url is None:
                 break
             detail_url = self.original_url + detail_page_url
-            publish_time = sel.xpath('./td[2]/text()').extract_first()
-            # yield scrapy.Request(url=detail_url,meta={"detail_url":detail_url,"publish_time":publish_time},callback=self.detail_parse,dont_filter=True)
+            raw_time = sel.xpath('.//td[@align="right"]/text()').extract_first()
+            raw_time = re.sub("[\u4e00-\u9fa5]","-",raw_time)
+            publish_time = raw_time[:-1]
+            yield scrapy.Request(url=detail_url,meta={"detail_url":detail_url,"publish_time":publish_time},callback=self.detail_parse,dont_filter=True)
 
         if self.num < 2:
             self.num += 1
@@ -38,7 +40,8 @@ class SichuanSpider(Spider):
         sel = Selector(response)
         item["detail_url"] = response.meta["detail_url"]
         item["publish_time"] = response.meta["publish_time"]
-        item["location"] = "四川"
+        item["province"] = "四川"
+        item["location"] = ""
         title = sel.xpath('//div[@id="articlecontent"]/h2/ucaptitle/text()').extract_first()
         item["title"] = title.strip()
 

@@ -32,9 +32,13 @@ class QinghaiSpider(Spider):
     def detail_parse(self,response):
         item = BaseDataItem()
         sel = Selector(response)
+        raw_time_data = sel.xpath("//div[@class='abstract tc']/text()").extract()
+        raw_time = raw_time_data[3].strip().split(" ",1)
+        publish_time = raw_time[0]
         item["detail_url"] = response.meta["detail_url"]
-        item["publish_time"] = sel.xpath("//div[@class='abstract tc']/text()")
-        item["location"] = "青海"
+        item["publish_time"] = publish_time
+        item["province"] = "青海"
+        item["location"] = ""
         title = sel.xpath('//h1[@class="blue tc"]/text()').extract_first()
         item["title"] = title
         content = ""
