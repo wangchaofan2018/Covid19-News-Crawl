@@ -13,10 +13,11 @@ keyword_processor = KeywordProcessor()
 for keyword in kw_list:
     keyword_processor.add_keyword(keyword)
 for item in mydoc:
-    find_title = keyword_processor.extract_keyword(item["title"])
-    find_content = keyword_processor.extract_keyword(item["content"])
+    find_title = keyword_processor.extract_keywords(item["title"])
+    find_content = keyword_processor.extract_keywords(item["content"])
     if not (find_title or find_content):
+        myDeleteQuery = {"_id":item["_id"]}
+        item.pop("_id")
         deleteColl.insert_one(item)
-        myDeleteQuery = {"_id",item["_id"]}
         collection.delete_one(myDeleteQuery)
     

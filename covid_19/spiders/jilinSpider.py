@@ -29,7 +29,7 @@ class JilinSpider(Spider):
                 return
             yield scrapy.Request(url=detail_url,meta={"detail_url":detail_url,"title":title,"publish_time":publish_time},callback=self.detail_parse,dont_filter=True)
 
-        if self.num < 24:
+        if self.num < 4:
             next_page_href = self.original_url + "index_%s.html"%str(self.num)
             self.num += 1
             yield scrapy.Request(url=next_page_href,callback=self.parse,dont_filter=True)

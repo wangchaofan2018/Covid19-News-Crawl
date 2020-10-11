@@ -37,8 +37,10 @@
 **确保权限**
     sudo chown 账户名 /usr/local/var/mongodb
     sudo chown 账户名 /usr/local/var/log/mongodb
+
 **后台启动mongodb服务** 
     *启动之前记得更新配置 source ~/.bash_profile*
+
     mongod --dbpath /usr/local/var/mongodb --logpath /usr/local/var/log/mongodb/mongo.log --fork
 
 **安装 python包**

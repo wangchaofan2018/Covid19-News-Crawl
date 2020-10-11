@@ -38,6 +38,9 @@ elif site == "liaoning":
 elif site == "zhejiang":
     name = "浙江"
     mydoc = collection.find({"location":name})
+else:
+    name = "全部"
+    mydoc = collection.find()
 for item in mydoc:
     detail_url = item["detail_url"]
     sheet.write(cur,0,item["publish_time"])
