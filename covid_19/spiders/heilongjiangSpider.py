@@ -64,7 +64,7 @@ class LiaoningSpider(Spider):
             iframe_text = sel.xpath("//iframe/@src").extract_first()
             text_url = self.domain+re.findall("[\.+,\/]+(.*?)\nhttps",iframe_text,re.M)[0]
             yield scrapy.Request(url=text_url,meta={"item":item,'use_browser':False},callback=self.text_parse,dont_filter=True)
-            continue
+            return
 
         for content_str in content_strs:
             content = content + content_str.strip()+"\n"

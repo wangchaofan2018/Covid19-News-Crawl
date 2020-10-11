@@ -47,12 +47,10 @@ class JilinSpider(Spider):
         content_text = sel.xpath('//div[@class="TRS_Editor"]//text()').extract()
         for col in content_text:
             content = content + col.strip() +"\n"
+        item["summary"]=""
         item["content"] = content
-
-        attend_persons_all = ""
         attend_persons_text = sel.xpath('//font/text()').extract()
         item["attend_persons"] = attend_persons_text
-        item["summary"]=""
         yield item
 
 
