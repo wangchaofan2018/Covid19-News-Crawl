@@ -41,6 +41,7 @@ class AnhuiSpider(Spider):
         item["title"] = response.meta["title"]
         item["publish_time"] = response.meta["publish_time"]
         item["location"] = "安徽"
+        item["summary"]=""
 
         attend_persons = ""
         attend_person_all = sel.xpath('//div[@class="fty_imglistlb"]/ul/li/a/@data-title').extract()
@@ -53,11 +54,8 @@ class AnhuiSpider(Spider):
         content_text = sel.xpath('//div[@class="desc j-fontContent"]/p/text()').extract()
         for row in content_text:
             content = content + row.strip() + "\n"
-
         item["content"] = content
-        print(item)
-
-        # yield item
+        yield item
 
         
 

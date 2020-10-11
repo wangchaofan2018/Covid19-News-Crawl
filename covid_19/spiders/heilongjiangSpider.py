@@ -5,6 +5,7 @@ from scrapy import Selector
 from covid_19.items import BaseDataItem
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+import re
 
 class LiaoningSpider(Spider):
     def __init__(self):
@@ -49,20 +50,37 @@ class LiaoningSpider(Spider):
         sel = Selector(response)
         attend_persons = sel.xpath('//div[@class="zbBox"]/div[2]//span//text()').extract_first()
         summary = sel.xpath('//div[@class="zbBox"]/div[3]//span//text()').extract_first()
-        content_strs= sel.xpath('//div[@id="zhiboc"]//text()').extract()
+        content_strs= sel.xpath('//div[@id="zhiboc"]//text()').extract() #新版发布会用的是div 老版本用的iframe框架 需要再请求一次拿到
         title = sel.xpath('//div[@class="title"]//text()').extract_first()
         content = ""
         location = "黑龙江"
-        for content_str in content_strs:
-            content = content + content_str.strip()+"\n"
         item["title"] = title
         item['publish_time']= publish_time
         item['location'] = location
+        item['detail_url'] = detail_url
         item['attend_persons'] = attend_persons
         item['summary'] = summary
+        if content_strs is None:
+            iframe_text = sel.xpath("//iframe/@src").extract_first()
+            text_url = self.domain+re.findall("[\.+,\/]+(.*?)\nhttps",iframe_text,re.M)[0]
+            yield scrapy.Request(url=text_url,meta={"item":item,'use_browser':False},callback=self.text_parse,dont_filter=True)
+            return
+
+        for content_str in content_strs:
+            content = content + content_str.strip()+"\n"
         item['content'] = content
-        item['detail_url'] = detail_url
         yield item
+
+        def text_parse(self,response):
+            item = response.meta["item"]
+            sel = Selector(response)
+            content_strs = sel.xpath("//table/tbody/tr/td/table[2]/tbody/tr/td/text()").extract()
+            content = ""
+            for content_str in content_strs:
+                content = content+content_str.strip()+"\n"
+            item["content"]=content
+            yield item
+
 
 
         

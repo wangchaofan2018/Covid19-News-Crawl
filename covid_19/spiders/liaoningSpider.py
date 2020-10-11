@@ -72,6 +72,7 @@ class LiaoningSpider(Spider):
             attend_persons_all = attend_persons_all + row.strip() + "\n"
         attend_persons = attend_persons_all
         item["attend_persons"] = attend_persons
+        item["summary"]=""
         yield item
 
 

@@ -40,14 +40,11 @@ class HunanSpider(Spider):
         item["title"] = response.meta["title"]
         item["publish_time"] = response.meta["publish_time"]
         item["location"] = "湖南"
-        attend_persons = ""
         attend_persons_all=sel.xpath('//ul[@class="fbh_list"]/li/p/text()').extract()
-        for person in attend_persons_all[1:]:
-            attend_persons = attend_persons + person.strip() + "\n"
-        item["attend_persons"] = attend_persons
+        item["attend_persons"] = attend_persons_all
 
         content = ""
-        content_text = sel.xpath('//div[@class="ct_txt"]//p/text()').extract()
+        content_text = sel.xpath('//div[@class="ct_txt"]//p//text()').extract()
         for row in content_text:
             content = content + row.strip() + "\n"
         item["content"] = content

@@ -61,6 +61,7 @@ class ZhejiangSpider(Spider):
 
         publish_time = sel.xpath('//div[@class="chat_cont_list"]/ul/li[2]/span[2]/text()').extract_first()
         item["publish_time"] = publish_time
+        item["summary"]=""
         yield item
 
 
