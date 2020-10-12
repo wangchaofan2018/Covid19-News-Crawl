@@ -5,11 +5,11 @@ import sys
 
 client = pymongo.MongoClient(settings.MONGO_DB_URI)
 db = client[settings.MONGO_DB_NAME]
-collection = db[settings.MONGO_COLLECTION_NAME]
+collection = db["deleteColl2"]#[settings.MONGO_COLLECTION_NAME]
 workbook = xlwt.Workbook()
 sheet = workbook.add_sheet("数据统计")
 
-titles = ["日期","省份","发布地点","出席人员","标题","新闻概要","网页地址","详细内容"]
+titles = ["日期","省份","发布地点","出席人员","标题","新闻概要","网页地址","详细内容","相关性打分"]
 for index in range(len(titles)):
     sheet.write(0,index,titles[index])
 
@@ -55,6 +55,7 @@ for item in mydoc:
     sheet.write(cur,5,summary)
     sheet.write(cur,6,xlwt.Formula('HYPERLINK("%s")'%detail_url))#item["detail_url"])
     sheet.write(cur,7,item["content"])
+    sheet.write(cur,8,item["score"])
     cur = cur+1
 
 workbook.save("%s-数据.xls"%name)

@@ -33,6 +33,7 @@ class BaseDataPipeline:
         time_arr = time.strptime(time_str,'%Y-%m-%d')
         time_stamp = time.mktime(time_arr)
         item["time_stamp"]=time_stamp
+        item["score"]=0
         if time_stamp > 1577808000:    
             #选取2020年以后的数据
             # if time_stamp> 1577808000:
