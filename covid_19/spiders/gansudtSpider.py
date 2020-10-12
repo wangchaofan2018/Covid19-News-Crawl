@@ -23,7 +23,8 @@ class GansuDtSpider(Spider):
         for info in deatil_page_info:
             detail_page_url = info.xpath('.//td[2]/a/@href').extract_first()
             detail_url = self.original_url + detail_page_url
-            publish_time = info.xpath('//td[3]/span/text()').extract_first()  #但时间形式为：[2020-09-09]，需要处理
+            publish_time_all = info.xpath('//td[3]/span/text()').extract_first()  #但时间形式为：[2020-09-09]，需要处理
+            publish_time = publish_time_all[1:-1]
             yield scrapy.Request(url=detail_url,meta={"detail_url":detail_url,"publish_time":publish_time},callback=self.detail_parse,dont_filter=True)
 
     def detail_parse(self,response):
