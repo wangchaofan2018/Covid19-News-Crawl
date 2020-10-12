@@ -2,7 +2,7 @@
 此爬虫爬取不同地区政务网站发布的新冠疫情历史发布会,用于数据分析,用到的技术栈有 scrapy、selenium、mongodb
 
 **需要下载最新环境chromedriver**
-***
+-------------
     sudo mv ~/Downloads/chromedriver /usr/bin
 
     vi ~/.bash_profile
@@ -10,7 +10,7 @@
     export PATH=$PATH:/usr/local/bin/ChromeDriver
 
 ### 下载mongodb
-***
+-------------
 **进入 /usr/local**
 
     cd /usr/local
@@ -44,7 +44,7 @@
     mongod --dbpath /usr/local/var/mongodb --logpath /usr/local/var/log/mongodb/mongo.log --fork
 
 **安装 python包**
-***
+-------------
     pip3 install selenium
     pip3 install scrapy
     pip3 install xlwt

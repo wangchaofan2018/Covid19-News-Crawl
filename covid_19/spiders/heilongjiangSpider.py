@@ -39,14 +39,14 @@ class LiaoningSpider(Spider):
                 target_url = href_str
             yield scrapy.Request(url=target_url,meta={"publish_time":publish_time,"detail_url":target_url,'use_browser':True},callback=self.parse_detail,dont_filter=True)
 
-        next_page_url = sel.xpath('//div[@class="page_ejn clearfix"]/a[last()-1]/@href').extract_first()
+        # next_page_url = sel.xpath('//div[@class="page_ejn clearfix"]/a[last()-1]/@href').extract_first()
         # if not next_page_url is None: #改成取前多少页
         #     next_page_url = self.next_base_url+next_page_url
         #     yield scrapy.Request(url=next_page_url,meta={'use_browser':False},callback=self.parse,dont_filter=True)
         
         if self.page<9:
             self.page +=1
-            next_page_url = "http://www.hlj.gov.cn/33/49/586/index_%s.html"%str(self.page)
+            next_page_url = "http://www.hlj.gov.cn/33/49/586/index%s.html"%str(self.page)
             yield scrapy.Request(url=next_page_url,meta={'use_browser':False},callback=self.parse,dont_filter=True)
 
     def parse_detail(self,response):

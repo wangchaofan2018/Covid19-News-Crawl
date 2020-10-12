@@ -50,7 +50,10 @@ class JiangsuSpider(Spider):
         title = response.meta["title"]
         publish_time = response.meta["publish_time"]
         sel = Selector(response)
-        content = sel.xpath('//div[@id="zoom"]/p/text()').extract_first()
+        content = ""
+        datas = sel.xpath('//div[@id="zoom"]/p//text()').extract()
+        for data in datas:
+            content = content + data
         item = BaseDataItem()
         item["detail_url"] = detail_url
         item["title"] = title
