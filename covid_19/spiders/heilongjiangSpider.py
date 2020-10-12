@@ -17,6 +17,7 @@ class LiaoningSpider(Spider):
         self.browser = webdriver.Chrome('chromedriver', chrome_options=chrome_options)
         self.domain = "http://www.hlj.gov.cn"
         self.next_base_url = "http://www.hlj.gov.cn/33/49/586/"
+        self.page = 1
         super(LiaoningSpider, self).__init__()
     
     name = "heilongjiang"
@@ -38,9 +39,14 @@ class LiaoningSpider(Spider):
                 target_url = href_str
             yield scrapy.Request(url=target_url,meta={"publish_time":publish_time,"detail_url":target_url,'use_browser':True},callback=self.parse_detail,dont_filter=True)
 
-        next_page_url = sel.xpath('//div[@class="page_ejn clearfix"]/a[last()-1]/@href').extract_first()
-        if not next_page_url is None:
-            next_page_url = self.next_base_url+next_page_url
+        # next_page_url = sel.xpath('//div[@class="page_ejn clearfix"]/a[last()-1]/@href').extract_first()
+        # if not next_page_url is None: #改成取前多少页
+        #     next_page_url = self.next_base_url+next_page_url
+        #     yield scrapy.Request(url=next_page_url,meta={'use_browser':False},callback=self.parse,dont_filter=True)
+        
+        if self.page<9:
+            self.page +=1
+            next_page_url = "http://www.hlj.gov.cn/33/49/586/index%s.html"%str(self.page)
             yield scrapy.Request(url=next_page_url,meta={'use_browser':False},callback=self.parse,dont_filter=True)
 
     def parse_detail(self,response):
@@ -53,10 +59,11 @@ class LiaoningSpider(Spider):
         content_strs= sel.xpath('//div[@id="zhiboc"]//text()').extract() #新版发布会用的是div 老版本用的iframe框架 需要再请求一次拿到
         title = sel.xpath('//div[@class="title"]//text()').extract_first()
         content = ""
-        location = "黑龙江"
+        province = "黑龙江"
         item["title"] = title
         item['publish_time']= publish_time
-        item['location'] = location
+        item['province'] = province
+        item['location'] = ""
         item['detail_url'] = detail_url
         item['attend_persons'] = attend_persons
         item['summary'] = summary
@@ -71,15 +78,15 @@ class LiaoningSpider(Spider):
         item['content'] = content
         yield item
 
-        def text_parse(self,response):
-            item = response.meta["item"]
-            sel = Selector(response)
-            content_strs = sel.xpath("//table/tbody/tr/td/table[2]/tbody/tr/td/text()").extract()
-            content = ""
-            for content_str in content_strs:
-                content = content+content_str.strip()+"\n"
-            item["content"]=content
-            yield item
+    def text_parse(self,response):
+        item = response.meta["item"]
+        sel = Selector(response)
+        content_strs = sel.xpath("//table/tbody/tr/td/table[2]/tbody/tr/td/text()").extract()
+        content = ""
+        for content_str in content_strs:
+            content = content+content_str.strip()+"\n"
+        item["content"]=content
+        yield item
 
 
 

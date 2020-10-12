@@ -16,6 +16,7 @@ class HubeiSpider(Spider):
         chrome_options.add_experimental_option('useAutomationExtension', False)
         # chrome_options.add_argument('--headless')
         self.browser = webdriver.Chrome('chromedriver', chrome_options=chrome_options)
+        self.page = 1
         super(HubeiSpider, self).__init__()
 
     name="hubei"
@@ -27,7 +28,6 @@ class HubeiSpider(Spider):
         yield scrapy.Request(url=url,meta={'use_browser':True},callback=self.parse,dont_filter=True)
 
     def parse(self,response):
-        page_hrefs = []
         sel = Selector(response)
         detail_page_hrefs = sel.xpath('//div[@class="row media_block"]//h4/a/@href').extract()
         for href_str in detail_page_hrefs:
@@ -35,9 +35,15 @@ class HubeiSpider(Spider):
             detail_url = self.base_url+href
             yield scrapy.Request(url=detail_url,meta={'use_browser':True,"detail_url":detail_url},callback=self.detail_parse,dont_filter=True)
 
-        next_page_href = sel.xpath('//nav/ul/li[last()]/a/@href').extract_first()
-        if not next_page_href != "javascript:void(0);":
-            next_url = self.base_url+''+next_page_href
+        # next_page_href = sel.xpath('//nav/ul/li[last()]/a/@href').extract_first()
+        # #请求到最后一页
+        # if not next_page_href != "javascript:void(0);":
+        #     next_url = self.base_url+''+next_page_href
+        #     yield scrapy.Request(url=next_url,meta={'use_browser':True},callback=self.parse,dont_filter=True)
+
+        if self.page<9:
+            next_url = "http://www.hubei.gov.cn/hbfb/xwfbh/index_%s.shtml"%str(self.page)
+            self.page +=1
             yield scrapy.Request(url=next_url,meta={'use_browser':True},callback=self.parse,dont_filter=True)
 
     def detail_parse(self,response):
@@ -52,7 +58,8 @@ class HubeiSpider(Spider):
             content = content+col.strip()+"\n"
         item["publish_time"] = sel.xpath("//ul[@class='list-unstyled int_list']/li[1]/text()").extract_first()
         item["attend_persons"] = sel.xpath("//ul[@class='list-unstyled int_list']/li[2]/text()").extract_first()
-        item["location"] = "湖北"
+        item["province"] = "湖北"
+        item["location"] = ""
         item["summary"] = sel.xpath("//ul[@class='list-unstyled int_list']//p/text()").extract_first().strip()
         item["title"] = sel.xpath("//h2/text()").extract_first()
         item["content"] = content

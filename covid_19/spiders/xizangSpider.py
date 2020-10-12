@@ -25,7 +25,6 @@ class XizangSpider(Spider):
             detail_url = self.original_url + href
             title = info.xpath('./a/@title').extract_first()  #在具体页面取标题更准确
             publish_time = info.xpath('./span/text()').extract_first() #content里的时间才是发布会真实日期
-            print(detail_url)
             yield scrapy.Request(url=detail_url,meta={"detail_url":detail_url,"publish_time":publish_time,"title":title},callback=self.detail_parse,dont_filter=True)
 
     def detail_parse(self,response):
@@ -35,7 +34,8 @@ class XizangSpider(Spider):
         item["publish_time"] = response.meta["publish_time"]
         item["title"] = response.meta["title"]
         item["summary"]=""
-        item["location"] = "西藏自治区"
+        item["province"] = "西藏自治区"
+        item["location"] = ""
         content = ""
         content_text = sel.xpath('//div[@class="vw-art-list"]//p/text()').extract()
         for row in content_text:
@@ -45,8 +45,7 @@ class XizangSpider(Spider):
         attend_persons_all = sel.xpath('//div[@class="vw-art-list"]//span/text()').extract()
         for person in attend_persons_all[1:]:
             attend_persons = attend_persons + person.strip() + "\n"
-        item["attend_persons"] = attend_persons
-        print(item)
-        # yield item
+        item["attend_persons"] = ""
+        yield item
 
         

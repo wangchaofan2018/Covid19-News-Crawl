@@ -39,7 +39,8 @@ class HunanSpider(Spider):
         item["detail_url"] = response.meta["detail_url"]
         item["title"] = response.meta["title"]
         item["publish_time"] = response.meta["publish_time"]
-        item["location"] = "湖南"
+        item["province"] = "湖南"
+        item["location"] = ""
         attend_persons_all=sel.xpath('//ul[@class="fbh_list"]/li/p/text()').extract()
         item["attend_persons"] = attend_persons_all
 
@@ -49,8 +50,6 @@ class HunanSpider(Spider):
             content = content + row.strip() + "\n"
         item["content"] = content
         item["summary"]=""
-        print(item)
-
-        # yield item
+        yield item
 
 

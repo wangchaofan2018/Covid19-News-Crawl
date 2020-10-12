@@ -19,12 +19,15 @@ class SichuanSpider(Spider):
 
     def parse(self,response):
         sel = Selector(response)
-        detail_page_info =sel.xpath('//table[@align="center"]')
+        detail_page_info =sel.xpath('//table[@width="95%"]//table[@width="100%"]//tr')
         for info in detail_page_info:
-            detail_page_url = sel.xpath('.//td/a/@href').extract_first()
+            detail_page_url = info.xpath('./td[1]/a/@href').extract_first()
+            if detail_page_url is None:
+                break
             detail_url = self.original_url + detail_page_url
-            publish_time = sel.xpath('.//td[@align="right"]/text()').extract_first()
-            print(detail_url)
+            raw_time = sel.xpath('.//td[@align="right"]/text()').extract_first()
+            raw_time = re.sub("[\u4e00-\u9fa5]","-",raw_time)
+            publish_time = raw_time[:-1]
             yield scrapy.Request(url=detail_url,meta={"detail_url":detail_url,"publish_time":publish_time},callback=self.detail_parse,dont_filter=True)
 
         if self.num < 2:
@@ -37,9 +40,10 @@ class SichuanSpider(Spider):
         sel = Selector(response)
         item["detail_url"] = response.meta["detail_url"]
         item["publish_time"] = response.meta["publish_time"]
-        item["location"] = "四川"
+        item["province"] = "四川"
+        item["location"] = ""
         title = sel.xpath('//div[@id="articlecontent"]/h2/ucaptitle/text()').extract_first()
-        item["title"] = title
+        item["title"] = title.strip()
 
         content = ""
         content_text = sel.xpath('//div[@id="cmsArticleContent"]//p/text()').extract()
@@ -48,10 +52,7 @@ class SichuanSpider(Spider):
         item["content"] = content
         item["attend_persons"] = ""
         item["summary"]=""
-        print(item)
-
-        # yield item
-        #//table[@align="center"]//td[@align="right"]
+        yield item
 
 
 

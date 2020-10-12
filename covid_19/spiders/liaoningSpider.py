@@ -21,7 +21,6 @@ class LiaoningSpider(Spider):
 
     def parse(self,response):
         sel = Selector(response)
-        page_hrefs = []
         detail_page_info = sel.xpath('//div[@class="zf_mainconlist"]//ul/li') #当前页发布会标题和日期
         for info in detail_page_info:
             detail_url = info.xpath('./a/@href').extract_first() #当前页发布会连接
@@ -59,7 +58,8 @@ class LiaoningSpider(Spider):
         item["publish_time"] = response.meta["publish_time"]
         item["detail_url"] = response.meta["detail_url"]
         item["title"] = response.meta["title"]
-        item["location"] = "辽宁"
+        item["province"] = "辽宁"
+        item["location"] = ""
         content =""
         content_text = sel.xpath('//div[@class="fbh_wzf"]//text()').extract()
         for col in content_text:

@@ -119,7 +119,7 @@ class BrowserDownloaderMiddleware(object):
 })
             spider.browser.get(request.url)  # 用谷歌浏览器访问url
             # 使用browser，由于还没有proxy，多等几秒
-            time.sleep(1)
+            time.sleep(2)
             # TODO 如果有proxy，怎么处理？这个中间件的位置，应该在添加代理中间件之后，scrapy的框架下载中间件之前
             # TODO 貌似只有在new driver（）的时候，通过option才能指定，暂时没找到在new出来以后，动态修改的方法
             print('由于headless browser模式暂时没有支持代理，proxy无效')

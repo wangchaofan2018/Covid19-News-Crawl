@@ -11,6 +11,8 @@ class BaseDataItem(Item):
     publish_time = Field()
     #地点
     location = Field()
+    #省份
+    province = Field()
     #出席人员
     attend_persons = Field()
     #标题
@@ -21,4 +23,6 @@ class BaseDataItem(Item):
     content = Field()
     #详情链接
     detail_url = Field()
+    #时间戳
+    time_stamp = Field()
     pass

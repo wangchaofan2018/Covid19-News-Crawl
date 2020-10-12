@@ -8,8 +8,8 @@ from covid_19.items import BaseDataItem
 
 class ZhejiangSpider(Spider):
     def __init__(self):
-        super(ZhejiangSpider, self).__init__()
         self.since = 0
+        super(ZhejiangSpider, self).__init__()
 
     name = "zhejiang"
 
@@ -26,14 +26,13 @@ class ZhejiangSpider(Spider):
     def parse(self,response):
         sel = Selector(response)
         records = sel.xpath("//record").extract()
-        print(records)
         for record in records:
             detail_url = re.findall(r'<.*?a.*?href="(.*?)" title', record, re.I|re.S|re.M)[0]
-            title = urls=re.findall(r'<.*?a.*?title="(.*?)" target', record, re.I|re.S|re.M)[0]
+            title =re.findall(r'<.*?a.*?title="(.*?)" target', record, re.I|re.S|re.M)[0]
             # 可以看一下能否处理一下publish_time的正则，从这里获取
-            # publish_time = 
+            publish_time = re.findall('.*?<span>(.*?)</span>',record,re.M)[0]
 
-            yield scrapy.Request(url=detail_url,meta={"detail_url":detail_url,"title":title},callback=self.detail_parse,dont_filter=True)
+            yield scrapy.Request(url=detail_url,meta={"detail_url":detail_url,"title":title,"publish_time":publish_time},callback=self.detail_parse,dont_filter=True)
         
         if len(records)==45:
             data_param = {
@@ -52,15 +51,15 @@ class ZhejiangSpider(Spider):
         sel = Selector(response)
         item["detail_url"] = response.meta["detail_url"]
         item["title"] = response.meta["title"]
-        item["location"] = "浙江"
+        item["province"] = "浙江"
+        item["location"] = ""
         content = sel.xpath('//div[@class="chat_cont_list"]/ul/li[4]/span[2]/text()').extract_first()
         item["content"] = content
 
         attend_persons_all = sel.xpath('//div[@class="chat_cont_list"]/ul/li[3]/span[2]/text()').extract_first()
         item["attend_persons"] = attend_persons_all
-
-        publish_time = sel.xpath('//div[@class="chat_cont_list"]/ul/li[2]/span[2]/text()').extract_first()
-        item["publish_time"] = publish_time
+        # publish_time = sel.xpath('//div[@class="chat_cont_list"]/ul/li[2]/span[2]/text()').extract_first()
+        item["publish_time"] = response.meta["publish_time"]
         item["summary"]=""
         yield item
 
