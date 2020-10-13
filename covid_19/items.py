@@ -25,4 +25,6 @@ class BaseDataItem(Item):
     detail_url = Field()
     #时间戳
     time_stamp = Field()
+    #打分
+    score = Field()
     pass
