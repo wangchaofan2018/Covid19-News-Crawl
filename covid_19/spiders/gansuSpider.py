@@ -9,7 +9,7 @@ class GansuNewsSpider(Spider):
     def __init__(self):
         super(GansuNewsSpider, self).__init__()
     
-    name = "gansunews"
+    name = "gansu"
     original_url = "http://www.gansu.gov.cn"
 
     def start_requests(self):
@@ -29,7 +29,8 @@ class GansuNewsSpider(Spider):
         item = BaseDataItem()
         sel = Selector(response)
         item["detail_url"] = response.meta["detail_url"]
-        item["location"] = "甘肃"
+        item["province"] = "甘肃"
+        item["location"] = ""
         item["publish_time"] = ""  #时间在正文里的更准确
         title = sel.xpath('//table[@width="95%"]//td/text()').extract_first()
         item["title"] = title

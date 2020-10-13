@@ -46,7 +46,8 @@ class GansuDtSpider(Spider):
         sel = Selector(response)
         item["detail_url"] = response.meta["detail_url"]
         item["publish_time"] = response.meta["publish_time"]
-        item["location"] = "甘肃"
+        item["province"] = "甘肃"
+        item["location"] = ""
         item["attend_persons"]=[]
         title = ""
         title_text = sel.xpath('//table[@width="95%"]//tr[1]/td/text()').extract()
