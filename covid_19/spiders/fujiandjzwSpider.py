@@ -22,17 +22,15 @@ class FujianDjzwSpider(Spider):
             publish_time = info.xpath('./span/text()').extract_first()
             title = info.xpath('./a/text()').extract_first()
             yield scrapy.Request(url = detail_url,meta={"detail_url":detail_url,"publish_time":publish_time,"title":title},callback=self.detail_parse,dont_filter=True)
+
     def detail_parse(self,response):
         item = BaseDataItem()
         sel = Selector(response)
         item["detail_url"] = response.meta["detail_url"]
         item["publish_time"] = response.meta["publish_time"]
         item["title"] = response.meta["title"]
-        summary = ""
-        summary_text = sel.xpath('//td[@id="new_message_id"]//p[1]//text()').extract()
-        for sum in summary_text:
-            summary = summary + sum.strip() +"\n"
-        item["summary"]= summary
+        summary_text = sel.xpath('//td[@id="new_message_id"]//p//text()').extract_first()
+        item["summary"]= summary_text
         item["province"] = "福建"
         item["location"] = ""
         item["attend_persons"] = ""
@@ -42,5 +40,4 @@ class FujianDjzwSpider(Spider):
         for row in content_text:
             content = content + row.strip() +"\n"
         item["content"] = content
-        print(item)
-        # yield item
+        yield item
