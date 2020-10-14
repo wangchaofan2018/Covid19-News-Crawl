@@ -5,7 +5,7 @@ import sys
 
 client = pymongo.MongoClient(settings.MONGO_DB_URI)
 db = client[settings.MONGO_DB_NAME]
-collection = db["deleteColl2"]#[settings.MONGO_COLLECTION_NAME]
+collection = db[settings.MONGO_COLLECTION_NAME]#db["deleteColl2"]
 workbook = xlwt.Workbook()
 sheet = workbook.add_sheet("数据统计")
 
