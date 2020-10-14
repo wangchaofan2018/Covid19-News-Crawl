@@ -3,3 +3,5 @@ covid_19/spiders/__pycache__
 .vscode/*
 covid_19/__init__.pyc
 .DS_Store
+export_mongo_data.pyc
+logs/*.txt
