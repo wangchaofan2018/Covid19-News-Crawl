@@ -33,12 +33,12 @@
     sudo mkdir -p /usr/local/var/mongodb
 
 **日志文件路径：**
-    sudo mkdir -p /usr/local/var/log/mongodb
 
+    sudo mkdir -p /usr/local/var/log/mongodb
 **确保权限**
+
     sudo chown 账户名 /usr/local/var/mongodb
     sudo chown 账户名 /usr/local/var/log/mongodb
-
 **后台启动mongodb服务** 
     *启动之前记得更新配置 source ~/.bash_profile*
 
@@ -53,3 +53,7 @@
 大佬做的匹配文本的项目，可以保证无论数据量多大处理的时间都是不变的，本项目用于做mongo数据清洗 对他的实现感兴趣可以看他[论文](https://arxiv.org/pdf/1711.00046.pdf)
 
     pip3 install flashtext
+
+**项目根目录下创建logs来存放日志文件**
+-------------
+    mkdir logs
