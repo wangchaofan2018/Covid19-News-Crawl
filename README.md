@@ -9,8 +9,9 @@
 
     export PATH=$PATH:/usr/local/bin/ChromeDriver
 
-### 下载mongodb
+**下载mongodb**
 -------------
+
 **进入 /usr/local**
 
     cd /usr/local
