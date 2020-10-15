@@ -48,6 +48,8 @@ class LiaoningSpider(Spider):
         text_url_src = sel.xpath('//div[@class="fbh_wz"]/iframe[1]/@src').extract_first()
         text_url = self.gouver_url + text_url_src
         title = sel.xpath('//div[@class="dlist_titlefbh"]//text()').extract_first()
+        if title is None:
+            title = sel.xpath('//div[@class="dlist_title"]//text()').extract_first()
 
         yield scrapy.Request(url = text_url,meta={"detail_url":detail_url,"title":title,"publish_time":publish_time,"title":title},callback=self.text_parse,dont_filter=True)
 

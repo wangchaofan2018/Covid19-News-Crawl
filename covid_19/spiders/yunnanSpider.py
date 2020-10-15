@@ -28,7 +28,7 @@ class YunnannewsSpider(Spider):
 
         if self.num < 3:
             self.num += 1
-            next_page_url = "http://www.yn.gov.cn/ynxwfbt/html/wangqizhibohuigu/shengzhengfuxinwenbanfabuhui/%s.html"%str(sel.num)
+            next_page_url = "http://www.yn.gov.cn/ynxwfbt/html/wangqizhibohuigu/shengzhengfuxinwenbanfabuhui/%s.html"%str(self.num)
             yield scrapy.Request(url=next_page_url,callback=self.parse,dont_filter=True)
 
     def deatil_parse(self,response):
