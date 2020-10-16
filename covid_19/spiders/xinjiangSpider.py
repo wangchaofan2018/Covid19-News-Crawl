@@ -54,6 +54,5 @@ class XinjiangSpider(Spider):
         for col in content_text[1:]:
             content = content + col.strip() +"\n"
         item["content"] = content
-        print(item)
-        # yield item
+        yield item
 

@@ -47,5 +47,4 @@ class YunnanXdSpider(Spider):
         for row in content_text:
             content = content + row.strip() +"\n"
         item["content"] = content
-        print(item)
-        # yield item
+        yield item

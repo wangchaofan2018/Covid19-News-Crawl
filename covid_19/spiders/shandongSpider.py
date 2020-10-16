@@ -48,8 +48,7 @@ class HainanSpider(Spider):
         for col in content_text:
             content = content + col.strip() +"\n"
         item["content"] = content
-        print(item)
-        # yield item
+        yield item
 
 
 

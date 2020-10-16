@@ -9,7 +9,7 @@ class YunnannewsSpider(Spider):
     def __init__(self):
         super(YunnannewsSpider, self).__init__()
         self.num = 1
-    name = "yunnannews"
+    name = "yunnan"
     original_url = "http://www.yn.gov.cn"
 
     def start_requests(self):

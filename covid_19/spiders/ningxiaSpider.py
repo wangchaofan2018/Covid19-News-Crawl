@@ -50,5 +50,6 @@ class NingxiaSpider(Spider):
         item["title"] = title
         item["summary"] = ""
         item["content"] = content
+        yield item
                 
 

@@ -86,8 +86,7 @@ class LiaoningSpider(Spider):
         for content_str in content_strs:
             content = content+content_str.strip()+"\n"
         item["content"]=content
-        print(item)
-        # yield item
+        yield item
 
 
 
