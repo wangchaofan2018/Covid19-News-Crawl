@@ -41,7 +41,7 @@ class HeilongjiangSpider(Spider):
         for row in summary_text:
             summary = summary + row.strip() +"\n"
         item["summary"] = summary
-        item["province"] = "广东"
+        item["province"] = "黑龙江"
         item["location"] = ""
         attend_persons = ""
         attend_persons_text = sel.xpath('//div[@id="content"]//p/span[@style="color: #0033ff"]//text()').extract()

@@ -5,44 +5,58 @@ from scrapy import Request
 from scrapy import Selector
 from covid_19.items import BaseDataItem
 
-class YunnannewsSpider(Spider):
+class YunnanSpider(Spider):
     def __init__(self):
-        super(YunnannewsSpider, self).__init__()
+        super(YunnanSpider, self).__init__()
         self.num = 1
-    name = "yunnannews"
-    original_url = "http://www.yn.gov.cn"
-
+    name = "yunnan"
+    original_url = "http://www.scio.gov.cn/xwfbh/gssxwfbh/xwfbh/yunnan/"
     def start_requests(self):
-        url = "http://www.yn.gov.cn/ynxwfbt/html/wangqizhibohuigu/shengzhengfuxinwenbanfabuhui/"
+        url = "http://www.scio.gov.cn/xwfbh/gssxwfbh/xwfbh/yunnan/index.htm"
         yield scrapy.Request(url=url,callback=self.parse,dont_filter=True)
-
     def parse(self,response):
         sel = Selector(response)
-        detail_page_info = sel.xpath('//ul[@class="list lh24 f14"]//li')
+        detail_page_info = sel.xpath('//table[@id="PagerOutline1"]//li')
         for info in detail_page_info:
-            publish_time = info.xpath('./span[2]/text()').extract_first()
-            detail_url_href = info.xpath('./a/@href').extract_first()
+            detail_url_href = info.xpath('./div/a/@href').extract_first()
             detail_url = self.original_url + detail_url_href
-            title = info.xpath('./a/text()').extract_first()
-            yield scrapy.Request(url = detail_url,meta={"detail_url":detail_url,"publish_time":publish_time,"title":title},callback=self.detail_parse,dont_filter=True)
+            publish_time_all = info.xpath('./span[@class="ftime fr"]/text()').extract_first()
+            publish_time = publish_time_all[1:-1]
+            # title = info.xpath('./div/a/text()').extract_first()
+            yield scrapy.Request(url = detail_url,meta={"detail_url":detail_url,"publish_time":publish_time},callback=self.detail_parse,dont_filter=True)
 
-        if self.num < 3:
+        if self.num < 4:
+            next_page_url = "http://www.scio.gov.cn/xwfbh/gssxwfbh/xwfbh/yunnan/index_%s.htm"%str(self.num)
             self.num += 1
-            next_page_url = "http://www.yn.gov.cn/ynxwfbt/html/wangqizhibohuigu/shengzhengfuxinwenbanfabuhui/%s.html"%str(self.num)
             yield scrapy.Request(url=next_page_url,callback=self.parse,dont_filter=True)
 
-    def deatil_parse(self,response):
+    def detail_parse(self,response):
         item = BaseDataItem()
         sel = Selector(response)
         item["detail_url"] = response.meta["detail_url"]
         item["publish_time"] = response.meta["publish_time"]
-        item["title"] = response.meta["title"]
-        item["summary"]=""
+        title = ""
+        title_text = sel.xpath('//div[@id="content"]//p[1]/text()').extract()
+        for tit in title_text:
+            title = title + tit.strip() +"\n"
+        item["title"] = title
+        summary = ""
+        summary_text = sel.xpath('//div[@id="content"]//p[2]//text()').extract()
+        for row in summary_text:
+            summary = summary + row.strip() +"\n"
+        item["summary"] = summary
         item["province"] = "云南"
         item["location"] = ""
-        item["attend_persons"] = ""
+        attend_persons = ""
+        attend_persons_text = sel.xpath('//div[@id="content"]//p/span[@style="color: #0033ff"]//text()').extract()
+        for per in attend_persons_text:
+            attend_persons = attend_persons + per.strip() +"\n"
+        item["attend_persons"] = attend_persons
         item["time_stamp"] = ""
-        content = ""  #content内有翻页且页数不固定
-        content_text = sel.xpath('')
-
-
+        content = ""
+        content_text = sel.xpath('//div[@id="content"]//p//text()').extract()
+        for col in content_text[1:]:
+            content = content + col.strip() +"\n"
+        item["content"] = content
+        print(item)
+        # yield item
