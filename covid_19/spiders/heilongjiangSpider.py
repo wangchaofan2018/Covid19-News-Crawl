@@ -67,7 +67,7 @@ class LiaoningSpider(Spider):
         item['detail_url'] = detail_url
         item['attend_persons'] = attend_persons
         item['summary'] = summary
-        if content_strs is None:
+        if len(content_strs) ==0 or content_strs[0]=="\n":
             iframe_text = sel.xpath("//iframe/@src").extract_first()
             text_url = self.domain+re.findall("[\.+,\/]+(.*?)\nhttps",iframe_text,re.M)[0]
             yield scrapy.Request(url=text_url,meta={"item":item,'use_browser':False},callback=self.text_parse,dont_filter=True)
@@ -86,7 +86,8 @@ class LiaoningSpider(Spider):
         for content_str in content_strs:
             content = content+content_str.strip()+"\n"
         item["content"]=content
-        yield item
+        print(item)
+        # yield item
 
 
 
