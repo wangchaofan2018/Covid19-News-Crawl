@@ -7,18 +7,24 @@ from covid_19.items import BaseDataItem
 
 class GansuNewsSpider(Spider):
     def __init__(self):
+        self.data_param = {
+            'webid':"1",
+            'columnid':"10345",
+            'unitid':"26829"
+        }
+        self.since = 0
         super(GansuNewsSpider, self).__init__()
     
     name = "gansu"
     original_url = "http://www.gansu.gov.cn"
 
     def start_requests(self):
-        url = "http://www.gansu.gov.cn/col/col10345/index.html"
-        yield scrapy.Request(url=url,callback=self.parse,dont_filter=True)
+        url = "http://www.gansu.gov.cn/module/jslib/jquery/jpage/dataproxy.jsp?startrecord=1&endrecord=120&perpage=40"
+        yield scrapy.FormRequest(url=url,method="POST",formdata=self.data_param,headers={"Content_type":"application/x-www-form-urlencoded"},callback=self.parse,dont_filter=True)
 
     def parse(self,response):
         sel = Selector(response)
-        detail_page_info = sel.xpath('//div[@class="default_pgContainer"]//li')
+        detail_page_info = sel.xpath('//li')
         for info in detail_page_info:
             detail_page_url = info.xpath('./a/@hret').extract_first()
             detail_url = self.original_url + detail_page_url

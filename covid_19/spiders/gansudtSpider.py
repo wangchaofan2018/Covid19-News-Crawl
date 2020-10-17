@@ -51,6 +51,7 @@ class GansuDtSpider(Spider):
         title_text = sel.xpath('//table[@width="95%"]//tr[1]/td/text()').extract()
         for col in title_text:
             title = title + col.strip()
+        item["title"]=title
 
         content = ""
         content_text = sel.xpath('//div[@id="zoom"]//p//text()').extract()
