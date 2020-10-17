@@ -10,7 +10,7 @@ class NingxiaSpider(Spider):
     def __init__(self):
         super(NingxiaSpider, self).__init__()
         self.prefix1 = "http://www.nx.gov.cn/zwxx_11337/ftt"
-        self.prefix2 = "http://www.nx.gov.cn/zwxx_11337/wztt"
+        self.prefix2 = "http://www.nx.gov.cn/zwxx_11337"
         self.num = 1
 
     name = "ningxia"
@@ -29,7 +29,13 @@ class NingxiaSpider(Spider):
                 detail_url = self.prefix1 + url_info[1:]
             else:
                 detail_url = self.prefix2 + url_info[2:]
-            scrapy.Request(url=detail_url,callback=self.detail_parse,dont_filter=True)
+            yield scrapy.Request(url=detail_url,callback=self.detail_parse,dont_filter=True)
+
+        if self.num<35:
+            url = "http://www.nx.gov.cn/zwxx_11337/ftt/index_%s.html"%str(self.num)
+            self.num += 1
+            yield scrapy.Request(url=url,callback=self.parse,dont_filter=True)
+
 
     def detail_parse(self,response):
         item = BaseDataItem()
@@ -42,7 +48,9 @@ class NingxiaSpider(Spider):
         for content_str in content_strs:
             content = content + content_str.strip()+"\n"
         attend_persons_str = sel.xpath('//div[@id="ofdneed"]//p[last()]/text()').extract_first()
-        attend_persons = attend_persons_str.split("，")
+        attend_persons = []
+        if not attend_persons_str is None:
+            attend_persons = attend_persons_str.split("，")
         item["publish_time"] = publish_time
         item["location"]=""
         item["province"]="宁夏"

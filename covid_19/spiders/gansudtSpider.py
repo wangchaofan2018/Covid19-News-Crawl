@@ -28,8 +28,6 @@ class GansuDtSpider(Spider):
         deatil_page_info = sel.xpath('//table[@width="96%"]//tr')
         for info in deatil_page_info:
             detail_page_url = info.xpath('.//td[2]/a/@href').extract_first()
-            print(detail_page_url)
-            print("***")
             detail_url = self.original_url + "/" + detail_page_url[2:-2]
             publish_time_all = info.xpath('//td[3]/span/text()').extract_first()  #但时间形式为：[2020-09-09]，需要处理
             publish_time = publish_time_all[1:-1]

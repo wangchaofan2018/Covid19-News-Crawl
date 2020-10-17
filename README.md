@@ -46,13 +46,14 @@
 
 **安装 python包**
 -------------
-    pip3 install selenium
-    pip3 install scrapy
-    pip3 install xlwt
+    pip install selenium
+    pip install scrapy
+    pip install xlwt
+    pip install pymongo
 
 大佬做的匹配文本的项目，可以保证无论数据量多大处理的时间都是不变的，本项目用于做mongo数据清洗 对他的实现感兴趣可以看他[论文](https://arxiv.org/pdf/1711.00046.pdf)
 
-    pip3 install flashtext
+    pip install flashtext
 
 **项目根目录下创建logs来存放日志文件**
 -------------

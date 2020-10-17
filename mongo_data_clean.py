@@ -8,8 +8,8 @@ db = client[settings.MONGO_DB_NAME]
 collection = db[settings.MONGO_COLLECTION_NAME]
 deleteColl = db["deleteColl"] #deleteColl
 mydoc = collection.find()
-kw_list = ["新冠","疫情","抗疫","病例","冠状病毒"]
-filter_list = ["扫黑除恶","自由贸易","光盘行动"]
+kw_list = ["新冠","疫情","抗疫","病例","冠状病毒","疾控中心","核酸检测","医学观察"]
+filter_list = ["扫黑除恶","自由贸易","光盘行动","消费","六稳六保","防汛抗旱","税租减免","电网","脱贫攻坚","进出口","慰问","复工复产"," 服贸会"]
 keyword_processor = KeywordProcessor()
 filter_processor = KeywordProcessor()
 for keyword in kw_list:
