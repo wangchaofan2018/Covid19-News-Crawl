@@ -26,10 +26,10 @@ class GansuNewsSpider(Spider):
         sel = Selector(response)
         detail_page_info = sel.xpath('//li')
         for info in detail_page_info:
-            detail_page_url = info.xpath('./a/@hret').extract_first()
-            detail_url = self.original_url + detail_page_url
-            print(detail_url)
-            yield scrapy.Request(url=detail_url,meta={"detail_url":detail_url},callback=self.detail_parse,dont_filter=True)
+            detail_page_url = info.xpath('./a/@href').extract_first()
+            detail_url = self.original_url +"/"+ detail_page_url
+            publish_time = info.xpath("//b/text()").extract_first()
+            yield scrapy.Request(url=detail_url,meta={"detail_url":detail_url,"publish_time":publish_time},callback=self.detail_parse,dont_filter=True)
 
     def detail_parse(self,response):
         item = BaseDataItem()
@@ -37,7 +37,7 @@ class GansuNewsSpider(Spider):
         item["detail_url"] = response.meta["detail_url"]
         item["province"] = "甘肃"
         item["location"] = ""
-        item["publish_time"] = ""  #时间在正文里的更准确
+        item["publish_time"] = response.meta["publish_time"]  #时间在正文里的更准确
         title = sel.xpath('//table[@width="95%"]//td/text()').extract_first()
         item["title"] = title
         content = ""
@@ -56,7 +56,6 @@ class GansuNewsSpider(Spider):
         summary_text = sel.xpath('//meta[@name="description"]/content/text()').extract()
         for sum in summary_text:
             summary = summary + sum.strip() + "\n"
-        item["summary"] = summary
-        print(item)
-        # yield item
+        item["summary"] = summary_text
+        yield item
         
