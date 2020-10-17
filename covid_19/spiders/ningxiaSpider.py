@@ -29,7 +29,7 @@ class NingxiaSpider(Spider):
                 detail_url = self.prefix1 + url_info[1:]
             else:
                 detail_url = self.prefix2 + url_info[2:]
-            yield scrapy.Request(url=detail_url,callback=self.detail_parse,dont_filter=True)
+            yield scrapy.Request(url=detail_url,meta={"detail_url":detail_url},callback=self.detail_parse,dont_filter=True)
 
         if self.num<35:
             url = "http://www.nx.gov.cn/zwxx_11337/ftt/index_%s.html"%str(self.num)
@@ -54,6 +54,7 @@ class NingxiaSpider(Spider):
         item["publish_time"] = publish_time
         item["location"]=""
         item["province"]="宁夏"
+        item["detail_url"]=response.meta["detail_url"]
         item["attend_persons"]=attend_persons
         item["title"] = title
         item["summary"] = ""
